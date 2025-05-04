@@ -1,0 +1,19 @@
+# action.yml
+name: "Validate Notion Task"
+description: "..."
+runs:
+  using: "node16"          # ← was node12, now node16 (or node18)
+  main:  "index.js"
+inputs:
+  notion_token:
+    description: "Your Notion integration token"
+    required: true
+  prefix:
+    description: "Ticket prefix (e.g. AWT)"
+    required: true
+  unique_id_name:
+    description: "Notion database property name for the numeric ID"
+    required: true
+  database_id:
+    description: "Notion database ID"
+    required: true
