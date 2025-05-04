@@ -13,13 +13,13 @@ A GitHub Action that enforces your branch name and PR title include a valid Noti
 
 ## Inputs
 
-| Name             | Required | Description                                                                                                                                                                            |
-| ---------------- | :------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `notion_token`   |   yes    | **Secret**: your Notion integration token (e.g. `secret_NOTION_TOKEN`).                                                                                                                |
-| `database_id`    |   yes    | The Notion database ID to query (copy from your Notion URL or API).                                                                                                                    |
-| `prefix`         |   yes    | The ticket prefix to look for (e.g. `AWT` for IDs like `AWT-123`).                                                                                                                     |
-| `unique_id_name` |   yes    | The name of the **number** property in your Notion database that holds the task ID (e.g. `Task ID`).                                                                                   |
-| `scope`          |    no    | Which checks to perform: <br> • `branch` — only validate the branch name <br> • `pr_title` — only validate the PR title <br> • `both` (default) — validate both and require they match |
+| Name            | Required | Description                                                                                                                                                                            |
+| --------------- | :------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `notion_token`  |   yes    | **Secret**: your Notion integration token (e.g. `secret_NOTION_TOKEN`).                                                                                                                |
+| `database_id`   |   yes    | The Notion database ID to query (copy from your Notion URL or API).                                                                                                                    |
+| `prefix`        |   yes    | The ticket prefix to look for (e.g. `AWT` for IDs like `AWT-123`).                                                                                                                     |
+| `property_name` |   yes    | The name of the **number** property in your Notion database that holds the task ID (e.g. `Task ID`).                                                                                   |
+| `scope`         |    no    | Which checks to perform: <br> • `branch` — only validate the branch name <br> • `pr_title` — only validate the PR title <br> • `both` (default) — validate both and require they match |
 
 ---
 
@@ -39,12 +39,12 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Validate Notion Task
-        uses: brenwell/validate-notion-task@v1
+        uses: brenwell/validate-notion-task@v0.0.1
         with:
           notion_token: ${{ secrets.NOTION_TOKEN }}
           database_id: ${{ secrets.NOTION_DATABASE_ID }}
           prefix: "AWT"
-          unique_id_name: "Task ID"
+          property_name: "Task ID"
 ```
 
 ## Testing Locally

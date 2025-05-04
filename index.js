@@ -72,7 +72,7 @@ async function findPageByTaskId(notion, databaseId, property, taskId) {
  * Main function to validate the Notion task ID.
  * @param {string} token - The Notion API token.
  * @param {string} prefix - The prefix for the ticket ID.
- * @param {string} uniqueIdName - The name of the unique ID property in Notion.
+ * @param {string} propertyName - The name of the unique ID property in Notion.
  * @param {string} databaseId - The ID of the Notion database.
  * @param {string} branchName - The name of the branch.
  * @param {string} prTitle - The title of the pull request.
@@ -80,7 +80,7 @@ async function findPageByTaskId(notion, databaseId, property, taskId) {
 async function main(
   token,
   prefix,
-  uniqueIdName,
+  propertyName,
   databaseId,
   branchName,
   prTitle,
@@ -130,8 +130,8 @@ async function main(
     const exists = await findPageByTaskId(
       notion,
       databaseId,
-      uniqueIdName,
-      uniqueId
+      propertyName,
+      ticketId
     );
     if (!exists) {
       core.setFailed(`Notion page ${ticketId} does not exist.`);
@@ -145,7 +145,7 @@ async function main(
 }
 
 async function run() {
-  const uniqueIdName = core.getInput("unique_id_name", { required: true });
+  const propertyName = core.getInput("property_name", { required: true });
   const prefix = core.getInput("prefix", { required: true });
   const databaseId = core.getInput("database_id", { required: true });
   const token = core.getInput("notion_token", { required: true });
@@ -154,7 +154,7 @@ async function run() {
   const prTitle = pr.title;
   const scope = core.getInput("scope")?.toLowerCase();
 
-  main(token, prefix, uniqueIdName, databaseId, branchName, prTitle, scope);
+  main(token, prefix, propertyName, databaseId, branchName, prTitle, scope);
 }
 
 // Export for unit tests

@@ -11,7 +11,7 @@ inputs:
   prefix:
     description: "Ticket prefix (e.g. AWT)"
     required: true
-  unique_id_name:
+  property_name:
     description: "Notion database property name for the numeric ID"
     required: true
   database_id:
