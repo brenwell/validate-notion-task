@@ -1,10 +1,9 @@
 const { Client } = require("@notionhq/client");
 const { findPageByTaskId } = require("./index.js");
 
-async function main(token, id) {
-  const databaseId = "1e3f751bad898046b7b9d36f3eae3fed";
+async function main(token, dbId, propertyName, id) {
   const notion = new Client({ auth: token });
-  const res = await findPageByTaskId(notion, databaseId, id);
+  const res = await findPageByTaskId(notion, dbId, propertyName, id);
   console.log("Page exists:", res);
 }
 
@@ -19,6 +18,6 @@ if (args.length < 2) {
   process.exit(1);
 }
 
-const [token, id] = args;
+const [token, dbId, propertyName, id] = args;
 
-main(token, id);
+main(token, dbId, propertyName, id);

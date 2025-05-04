@@ -45,3 +45,17 @@ jobs:
           prefix: "AWT"
           unique_id_name: "Task ID"
 ```
+
+## Testing Locally
+
+You can test the logic locally by running the CLI script provided in the repository. For example:
+
+```bash
+node cli.js <api_key> <database_id> <property_name> <id>
+
+e.g.
+
+node cli.js secret_NOTION_TOKEN abc12345-6789-0def-ghij-klmnopqrstuv "Task ID" 174
+```
+
+Replace `<api_key>` with your Notion integration token, `'Task ID'` with the name of the numeric property in your Notion database, and `174` with the task ID you want to validate. This will simulate the validation process and output the results directly in your terminal.
