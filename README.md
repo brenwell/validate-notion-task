@@ -39,7 +39,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Validate Notion Task
-        uses: brenwell/validate-notion-task@v0.0.1
+        uses: brenwell/validate-notion-task@v0.0.2
         with:
           notion_token: ${{ secrets.NOTION_TOKEN }}
           database_id: ${{ secrets.NOTION_DATABASE_ID }}
