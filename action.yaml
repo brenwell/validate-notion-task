@@ -1,8 +1,8 @@
 # action.yml
 name: "Validate Notion Task"
-description: "..."
+description: "Ensure branch names and/or PR titles include a valid Notion task ID."
 runs:
-  using: "node16"          # ← was node12, now node16 (or node18)
+  using: "node16"
   main:  "index.js"
 inputs:
   notion_token:
@@ -17,3 +17,11 @@ inputs:
   database_id:
     description: "Notion database ID"
     required: true
+  scope:
+    description: |
+      Which fields to validate:
+      - `branch` &rarr; only check the branch name  
+      - `pr_title` &rarr; only check the PR title  
+      - `both` (default) &rarr; check both and ensure they match
+    required: false
+    default: "both"

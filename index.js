@@ -83,7 +83,8 @@ async function main(
   uniqueIdName,
   databaseId,
   branchName,
-  prTitle
+  prTitle,
+  scope = "both"
 ) {
   try {
     if (!token) {
@@ -91,8 +92,16 @@ async function main(
       return;
     }
 
+    if (scope !== "branch" && scope !== "pr_title" && scope !== "both") {
+      core.setFailed(
+        `Invalid scope "${scope}". Valid values are "branch", "pr_title", or "both".`
+      );
+      return;
+    }
+
     const branchId = extractTicketIdFromBranchName(branchName, prefix);
-    if (!branchId) {
+
+    if (!branchId && (scope === "branch" || scope === "both")) {
       core.setFailed(
         `No valid ticket ID found in branch name (“${branchName}”).`
       );
@@ -100,11 +109,13 @@ async function main(
     }
 
     const prId = extractTicketIdFromPrTitle(prTitle, prefix);
-    if (!prId) {
+
+    if (!prId && (scope === "pr_title" || scope === "both")) {
       core.setFailed(`No valid ticket ID found in PR title (“${prTitle}”).`);
       return;
     }
-    if (branchId !== prId) {
+
+    if (branchId !== prId && scope === "both") {
       core.setFailed(
         `Branch ID (${branchId}) and PR ID (${prId}) do not match.`
       );
@@ -141,8 +152,9 @@ async function run() {
   const pr = github.context.payload.pull_request;
   const branchName = pr.head.ref;
   const prTitle = pr.title;
+  const scope = core.getInput("scope")?.toLowerCase();
 
-  main(token, prefix, uniqueIdName, databaseId, branchName, prTitle);
+  main(token, prefix, uniqueIdName, databaseId, branchName, prTitle, scope);
 }
 
 // Export for unit tests
