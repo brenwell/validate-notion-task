@@ -35,10 +35,10 @@ jobs:
   validate-notion:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Validate Notion Task
-        uses: your-org/validate-notion-task@v1
+        uses: brenwell/validate-notion-task@v1
         with:
           notion_token: ${{ secrets.NOTION_TOKEN }}
           database_id: ${{ secrets.NOTION_DATABASE_ID }}
