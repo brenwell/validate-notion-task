@@ -1,5 +1,6 @@
 const { test, expect } = require("@jest/globals");
 const {
+  main,
   extractTicketIdFromBranchName,
   extractTicketIdFromPrTitle,
 } = require("./index.js");
@@ -59,6 +60,7 @@ describe("extractTicketIdFromBranchName", () => {
     expect(result).toBe(789);
   });
 });
+
 describe("extractTicketIdFromPrTitle", () => {
   test("extracts the numeric ID from '[PREFIX-<number>] Title'", () => {
     const result = extractTicketIdFromPrTitle(
@@ -116,5 +118,76 @@ describe("extractTicketIdFromPrTitle", () => {
       "ABC+123"
     );
     expect(result).toBe(456);
+  });
+});
+describe("main", () => {
+  const mockSetFailed = jest.spyOn(core, "setFailed").mockImplementation();
+
+  test("fails if token is missing", async () => {
+    await main(null, "AWT", "unique_id", "databaseId", "AWT-123", "[AWT-123]");
+    expect(mockSetFailed).toHaveBeenCalledWith("Notion token is required.");
+  });
+
+  test("fails if scope is invalid", async () => {
+    await main(
+      "token",
+      "AWT",
+      "unique_id",
+      "databaseId",
+      "AWT-123",
+      "[AWT-123]",
+      "invalid"
+    );
+    expect(mockSetFailed).toHaveBeenCalledWith(
+      'Invalid scope "invalid". Valid values are "branch", "pr_title", or "both".'
+    );
+  });
+
+  test("fails if branch ID is missing and scope is 'branch'", async () => {
+    await main(
+      "token",
+      "AWT",
+      "unique_id",
+      "databaseId",
+      "invalid-branch",
+      "[AWT-123]",
+      "branch"
+    );
+
+    expect(mockSetFailed).toHaveBeenCalledWith(
+      'Expected "AWT-<number>" in "invalid-branch"'
+    );
+  });
+
+  test("fails if PR ID is missing and scope is 'pr_title'", async () => {
+    await main(
+      "token",
+      "AWT",
+      "unique_id",
+      "databaseId",
+      "AWT-123",
+      "Invalid title",
+      "pr_title"
+    );
+
+    expect(mockSetFailed).toHaveBeenCalledWith(
+      'Expected "AWT-<number>" at the start of "Invalid title"'
+    );
+  });
+
+  test("fails if branch ID and PR ID do not match in 'both' scope", async () => {
+    await main(
+      "token",
+      "AWT",
+      "unique_id",
+      "databaseId",
+      "AWT-123",
+      "[AWT-456]",
+      "both"
+    );
+
+    expect(mockSetFailed).toHaveBeenCalledWith(
+      "Branch ID (123) and PR ID (456) do not match."
+    );
   });
 });
